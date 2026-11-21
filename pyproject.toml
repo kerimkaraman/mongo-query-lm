@@ -1,0 +1,14 @@
+[project]
+name = "mongo-query-lm"
+version = "0.1.0"
+description = "A small language model for MongoDB queries, trained from scratch and then by fine-tuning, built to learn how model training works."
+readme = "README.md"
+authors = [
+    { name = "kerimkaraman" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
