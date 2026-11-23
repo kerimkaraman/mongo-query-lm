@@ -10,12 +10,12 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
   Concepts: token, vocabulary, encode/decode.
 - [x] **2. Counting bigram:** count which character follows which, then sample new queries.
   Concepts: probability, sampling. First measurement: valid JSON rate.
-- [ ] **3. Loss:** score how good a model is.
+- [x] **3. Loss:** score how good a model is.
   Concepts: negative log likelihood; random model vs counting model.
 - [ ] **4. Neural bigram:** learn the same table with a neural network.
   Concepts: tensor, weights, gradient, autograd, gradient descent.
 - [ ] **5. MLP:** look at the previous few characters.
-  Concepts: embedding, hidden layer, train/validation split, overfitting.
+  Concepts: embedding, hidden layer, train/validation split, overfitting, smoothing (unseen pairs have zero probability and infinite loss).
 - [ ] **6. Self-attention:** let a character look back at a far-away one (a `}` at its `{`).
   Concepts: attention, causal mask.
 - [ ] **7. Small transformer:** put the pieces together.
@@ -54,3 +54,9 @@ Filled in after each approved step.
 - A counting bigram is a 54 x 54 table of "which character follows which". Training is counting, and the table *is* the model. Generating means rolling dice on one row at a time (sampling).
 - It is a baseline, not a building block: later models never see this table, they have to beat it. Measured: **2.8% valid JSON** over 1,000 samples, and even those 28 are meaningless (`{"$gete": 17.3}`), so valid JSON alone overstates quality.
 - Its limit shows at `}`: whether a query should end depends on characters it cannot see, so it closes brackets it never opened. Details: [docs/concepts/bigram.md](concepts/bigram.md).
+
+### 3. Loss
+- Valid JSON rate is too coarse to train with: a query is either valid or not. Loss scores every single prediction, so even a small improvement shows up.
+- Loss is measured per token on real data: for each position, `-log` of the probability the model gave to the real next character, averaged over all 297,590 predictions.
+- Uniform random model: 3.989 (= log 54). Counting bigram: **1.626**. In plain terms, the bigram gives the right character about 20% on average instead of 1.85%, like choosing among ~5 options instead of 54 (perplexity).
+- Loss and valid JSON see different things: the bigram struggles most after digits (numbers are random, nobody can predict them), while the `}` mistakes that break whole queries barely move the average loss.
