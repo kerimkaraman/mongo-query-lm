@@ -6,7 +6,7 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
 
 - [x] **0. Data generator:** define the e-commerce schema and generate thousands of example queries from code.
   Concepts: synthetic data, variety, reproducibility (seeds).
-- [ ] **1. Tokenizer:** turn query text into numbers and back.
+- [x] **1. Tokenizer:** turn query text into numbers and back.
   Concepts: token, vocabulary, encode/decode.
 - [ ] **2. Counting bigram:** count which character follows which, then sample new queries.
   Concepts: probability, sampling. First measurement: valid JSON rate.
@@ -42,3 +42,9 @@ Filled in after each approved step.
 - One seeded random generator drives every choice, so seed 42 always gives the same 5,000 queries and seed 43 gives different ones.
 - Variety is measurable: equality appears ~4,200 times but `$gt` only ~420, and 16% of filters are duplicates. The model will learn frequent patterns best.
 - The dataset is small: ~290K characters with 53 distinct characters, and the longest query is 152 characters (useful later for choosing context length).
+
+### 1. Tokenizer
+- A model only works with numbers. A tokenizer splits text into tokens and gives each one an id: `encode` turns text into ids, `decode` turns ids back into text.
+- Mine is character-level and written from scratch: the vocabulary is every character in the data plus an end token, 54 in total. Sorting it makes the ids reproducible.
+- The end token (`\n`, id 0) marks where a query ends, so a model can learn to stop instead of running on forever.
+- There is no universal tokenizer. Every model family has its own, and a model only works with the tokenizer it was trained with.
