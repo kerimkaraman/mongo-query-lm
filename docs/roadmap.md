@@ -8,7 +8,7 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
   Concepts: synthetic data, variety, reproducibility (seeds).
 - [x] **1. Tokenizer:** turn query text into numbers and back.
   Concepts: token, vocabulary, encode/decode.
-- [ ] **2. Counting bigram:** count which character follows which, then sample new queries.
+- [x] **2. Counting bigram:** count which character follows which, then sample new queries.
   Concepts: probability, sampling. First measurement: valid JSON rate.
 - [ ] **3. Loss:** score how good a model is.
   Concepts: negative log likelihood; random model vs counting model.
@@ -48,3 +48,9 @@ Filled in after each approved step.
 - Mine is character-level and written from scratch: the vocabulary is every character in the data plus an end token, 54 in total. Sorting it makes the ids reproducible.
 - The end token (`\n`, id 0) marks where a query ends, so a model can learn to stop instead of running on forever.
 - There is no universal tokenizer. Every model family has its own, and a model only works with the tokenizer it was trained with.
+
+### 2. Counting bigram
+- Every language model does next token prediction. A bigram looks only at the last character; an LLM looks at the whole text. (Like `th` -> `e` in English: the model learns such patterns from data, nobody writes them.)
+- A counting bigram is a 54 x 54 table of "which character follows which". Training is counting, and the table *is* the model. Generating means rolling dice on one row at a time (sampling).
+- It is a baseline, not a building block: later models never see this table, they have to beat it. Measured: **2.8% valid JSON** over 1,000 samples, and even those 28 are meaningless (`{"$gete": 17.3}`), so valid JSON alone overstates quality.
+- Its limit shows at `}`: whether a query should end depends on characters it cannot see, so it closes brackets it never opened. Details: [docs/concepts/bigram.md](concepts/bigram.md).
