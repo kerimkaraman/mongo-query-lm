@@ -4,7 +4,7 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
 
 ## Part A: a language model from scratch
 
-- [ ] **0. Data generator:** define the e-commerce schema and generate thousands of example queries from code.
+- [x] **0. Data generator:** define the e-commerce schema and generate thousands of example queries from code.
   Concepts: synthetic data, variety, reproducibility (seeds).
 - [ ] **1. Tokenizer:** turn query text into numbers and back.
   Concepts: token, vocabulary, encode/decode.
@@ -36,3 +36,9 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
 ## What I learned
 
 Filled in after each approved step.
+
+### 0. Data generator
+- A model only learns from examples; with no dataset, I generate one from code. Every generated query is valid by construction and matches the schema.
+- One seeded random generator drives every choice, so seed 42 always gives the same 5,000 queries and seed 43 gives different ones.
+- Variety is measurable: equality appears ~4,200 times but `$gt` only ~420, and 16% of filters are duplicates. The model will learn frequent patterns best.
+- The dataset is small: ~290K characters with 53 distinct characters, and the longest query is 152 characters (useful later for choosing context length).
