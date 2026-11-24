@@ -2,7 +2,7 @@
 
 A small language model for MongoDB queries, built step by step to learn how model training works: first a character-level model trained **from scratch**, then a pretrained model **fine-tuned with LoRA** to turn questions into queries.
 
-**Status:** Part A, steps 0-3 done (synthetic data generator, character-level tokenizer, counting bigram baseline, loss). See [docs/roadmap.md](docs/roadmap.md) for the steps and what each one teaches.
+**Status:** Part A, steps 0-4 done (synthetic data generator, character-level tokenizer, counting bigram baseline, loss, neural bigram trained with PyTorch). See [docs/roadmap.md](docs/roadmap.md) for the steps and what each one teaches.
 
 ## Getting started
 
@@ -43,6 +43,14 @@ uv run python -m mongo_query_lm.loss
 ```
 
 Measures how surprised a model is by the real next character (average negative log likelihood over the dataset). Uniform random model: 3.989; counting bigram: 1.626. Also prints the loss of every prediction in one query and where the bigram struggles most.
+
+## Neural bigram
+
+```bash
+uv run python -m mongo_query_lm.neural_bigram
+```
+
+Learns the same next-character table with a single 54 x 54 weight matrix trained by gradient descent in PyTorch (CPU, about 35 s for both runs). Traces one weight during training, compares plain gradient descent with Adam (final loss 1.671 vs 1.627), and checks that the learned probabilities match the counted ones.
 
 ## Development
 

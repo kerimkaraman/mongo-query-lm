@@ -12,7 +12,7 @@ Each step teaches one concept and shows it in real numbers. A step is ticked onl
   Concepts: probability, sampling. First measurement: valid JSON rate.
 - [x] **3. Loss:** score how good a model is.
   Concepts: negative log likelihood; random model vs counting model.
-- [ ] **4. Neural bigram:** learn the same table with a neural network.
+- [x] **4. Neural bigram:** learn the same table with a neural network.
   Concepts: tensor, weights, gradient, autograd, gradient descent.
 - [ ] **5. MLP:** look at the previous few characters.
   Concepts: embedding, hidden layer, train/validation split, overfitting, smoothing (unseen pairs have zero probability and infinite loss).
@@ -60,3 +60,9 @@ Filled in after each approved step.
 - Loss is measured per token on real data: for each position, `-log` of the probability the model gave to the real next character, averaged over all 297,590 predictions.
 - Uniform random model: 3.989 (= log 54). Counting bigram: **1.626**. In plain terms, the bigram gives the right character about 20% on average instead of 1.85%, like choosing among ~5 options instead of 54 (perplexity).
 - Loss and valid JSON see different things: the bigram struggles most after digits (numbers are random, nobody can predict them), while the `}` mistakes that break whole queries barely move the average loss.
+
+### 4. Neural bigram
+- Training is a loop of four lines: compute the loss, clear old gradients, `loss.backward()` to get a gradient for every weight (autograd), then nudge every weight against its gradient. LLMs are trained with the same loop, just bigger.
+- Traced one weight (`$` -> `g`, counted 31.2%): the model started at 1.7%, the gradient kept saying "increase", and it reached 31.0%. The gradient shrinks as the answer gets close.
+- Plain gradient descent left rarely seen rows behind (loss 1.671, largest gap 37.5%). Adam gives every weight its own step size, so rare characters learn too: loss **1.627**, the counted table recovered with a 0.0% gap, in 50 steps instead of 300+.
+- Same table, same knowledge: valid JSON stays at 2.7%. A better model has to look further back.

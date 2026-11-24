@@ -7,7 +7,10 @@ authors = [
     { name = "kerimkaraman" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "numpy>=2.5.5",
+    "torch>=2.15.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.19,<0.13.0"]
